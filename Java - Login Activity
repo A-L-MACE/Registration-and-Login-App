@@ -1,0 +1,77 @@
+package com.example.registrationandloginapp;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class LoginActivity extends AppCompatActivity {
+
+    // ui components
+    private EditText edtUsername, edtPassword;
+    private Button btnLogin;
+    private TextView txtRegisterLink;
+
+    // database helper
+    private Database db;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // set layout to activity_login.xml
+        setContentView(R.layout.activity_login);
+
+        // initialize database
+        db = new Database(this);
+
+        // bind ui elements
+        edtUsername = findViewById(R.id.edtUsername);
+        edtPassword = findViewById(R.id.edtPassword);
+        btnLogin = findViewById(R.id.btnLogin);
+        txtRegisterLink = findViewById(R.id.txtRegisterLink);
+
+        // navigate to registration activity when register link is clicked
+        txtRegisterLink.setOnClickListener(v -> {
+            startActivity(new Intent(this, RegistrationActivity.class));
+        });
+
+        // handle login button click
+        btnLogin.setOnClickListener(v -> {
+            String username = edtUsername.getText().toString().trim();
+            String password = edtPassword.getText().toString().trim();
+
+            // check for empty fields
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "please fill in the fields below", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // check admin credentials
+            if (username.equals("admin1") && password.equals("password123")) {
+                Intent intent = new Intent(this, WelcomeActivity.class);
+                intent.putExtra("isAdmin", true);
+                startActivity(intent);
+                finish(); // close login activity
+                return;
+            }
+
+            // check normal user credentials in database
+            User user = db.loginUser(username, password);
+            if (user != null) {
+                Intent intent = new Intent(this, WelcomeActivity.class);
+                intent.putExtra("name", user.getFullName());
+                intent.putExtra("gender", user.getGender());
+                intent.putExtra("year", user.getBirthYear());
+                intent.putExtra("username", user.getUsername());
+                startActivity(intent);
+                finish(); // close login activity
+            } else {
+                Toast.makeText(this, "credentials are invalid", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
