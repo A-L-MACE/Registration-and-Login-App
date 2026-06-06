@@ -1,0 +1,91 @@
+package com.example.registrationandloginapp;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class RegistrationActivity extends AppCompatActivity {
+
+    // ui components
+    private EditText edtFullName, edtYear, edtUsername, edtPassword, edtRePassword;
+    private RadioGroup genderGroup;
+    private Button btnRegister;
+
+    // database helper
+    private Database db;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // set layout to activity_register.xml
+        setContentView(R.layout.activity_register);
+
+        // initialize database
+        db = new Database(this);
+
+        // bind ui elements
+        edtFullName = findViewById(R.id.edtFullName);
+        edtYear = findViewById(R.id.edtYear);
+        edtUsername = findViewById(R.id.edtUsername);
+        edtPassword = findViewById(R.id.edtPassword);
+        edtRePassword = findViewById(R.id.edtRePassword);
+        genderGroup = findViewById(R.id.genderGroup);
+        btnRegister = findViewById(R.id.btnRegister);
+
+        // set click listener for register button
+        btnRegister.setOnClickListener(v -> registerUser());
+    }
+
+    // method to handle user registration
+    private void registerUser() {
+        // get input values
+        String name = edtFullName.getText().toString().trim();
+        String year = edtYear.getText().toString().trim();
+        String username = edtUsername.getText().toString().trim();
+        String password = edtPassword.getText().toString();
+        String rePassword = edtRePassword.getText().toString();
+
+        // get selected gender
+        int selectedGenderId = genderGroup.getCheckedRadioButtonId();
+        if (selectedGenderId == -1) {
+            Toast.makeText(this, "select your gender", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        RadioButton selectedGender = findViewById(selectedGenderId);
+        String gender = selectedGender.getText().toString();
+
+        // validate fields
+        if (name.isEmpty() || year.isEmpty() || username.isEmpty() || password.isEmpty() || rePassword.isEmpty()) {
+            Toast.makeText(this, "please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // check if passwords match
+        if (!password.equals(rePassword)) {
+            Toast.makeText(this, "passwords do not match", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // check if username already exists
+        if (db.checkUsernameExists(username)) {
+            Toast.makeText(this, "username already taken", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // register user in database
+        boolean success = db.registerUser(name, gender, year, username, password);
+        if (success) {
+            Toast.makeText(this, "registration successful!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish(); // close registration activity
+        } else {
+            Toast.makeText(this, "error during registration", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
