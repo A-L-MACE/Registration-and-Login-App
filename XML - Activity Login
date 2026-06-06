@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- edittext for username input -->
+    <EditText
+        android:id="@+id/edtUsername"
+        android:hint="username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- edittext for password input -->
+    <EditText
+        android:id="@+id/edtPassword"
+        android:hint="password"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- button to submit login -->
+    <Button
+        android:id="@+id/btnLogin"
+        android:text="login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- textview link to navigate to registration activity -->
+    <TextView
+        android:id="@+id/txtRegisterLink"
+        android:text="register here"
+        android:textColor="#0000ff"
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
