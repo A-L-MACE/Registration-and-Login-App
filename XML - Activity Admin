@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- textview to display welcome message for admin -->
+    <TextView
+        android:id="@+id/adminText"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="welcome, admin!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- logout button to exit admin session -->
+    <Button
+        android:id="@+id/logoutButton"
+        android:text="logout"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
