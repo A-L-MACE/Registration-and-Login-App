@@ -1,0 +1,31 @@
+package com.example.registrationandloginapp;
+
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Button;
+import android.content.Intent;
+
+public class AdminActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // set the layout to activity_admin.xml
+        setContentView(R.layout.activity_admin);
+
+        // find the textview and set welcome message
+        TextView adminText = findViewById(R.id.adminText);
+        adminText.setText("welcome to the admin page, as an admin, you can view who has logged in or regsitered an account.");
+
+        // find the logout button
+        Button logoutButton = findViewById(R.id.logoutButton);
+
+        // set click listener to log out and return to login activity
+        logoutButton.setOnClickListener(v -> {
+            startActivity(new Intent(AdminActivity.this, LoginActivity.class));
+            finish(); // close admin activity
+        });
+    }
+}
