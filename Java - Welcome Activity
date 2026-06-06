@@ -1,0 +1,49 @@
+package com.example.registrationandloginapp;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class WelcomeActivity extends AppCompatActivity {
+
+    // ui components
+    private TextView txtDetails;
+    private Button btnLogout;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // set layout to activity_welcome.xml
+        setContentView(R.layout.activity_welcome);
+
+        // bind ui elements
+        txtDetails = findViewById(R.id.txtDetails);
+        btnLogout = findViewById(R.id.btnLogout);
+
+        // get intent extras to check user role or details
+        Intent intent = getIntent();
+        boolean isAdmin = intent.getBooleanExtra("isAdmin", false);
+
+        // display admin welcome message if user is admin
+        if (isAdmin) {
+            txtDetails.setText("welcome admin!\nyou have full control over users.");
+        } else {
+            // display user details
+            String name = intent.getStringExtra("name");
+            String gender = intent.getStringExtra("gender");
+            String year = intent.getStringExtra("year");
+            String username = intent.getStringExtra("username");
+
+            txtDetails.setText("welcome " + name + "\nusername: " + username + "\ngender: " + gender + "\nyear of birth: " + year);
+        }
+
+        // logout button navigates back to login activity
+        btnLogout.setOnClickListener(v -> {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish(); // close welcome activity
+        });
+    }
+}
